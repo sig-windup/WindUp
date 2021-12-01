@@ -1,0 +1,128 @@
+<!--상속-->
+{% extends 'manager_base.html' %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/article.css' %}">
+    <div class="header">
+        <h1>뉴스</h1>
+    </div>
+
+    <form method="get" action="" class="form" >
+        <div style="margin-left: 80%; margin-top: 2%;">
+        팀 선택
+      <select name="team" id="id_team" onchange="location = this.value;">
+        <option class="전체" value="?team=전체" >전체</option>
+        <option class="삼성" value="?team=삼성">삼성</option>
+        <option class="롯데" value="?team=롯데">롯데</option>
+        <option class="NC" value="?team=NC">NC</option>
+        <option class="KT" value="?team=KT">KT</option>
+        <option class="LG" value="?team=LG">LG</option>
+        <option class="두산" value="?team=두산">두산</option>
+        <option class="키움" value="?team=키움">키움</option>
+        <option class="SSG" value="?team=SSG">SSG</option>
+        <option class="KIA" value="?team=KIA">KIA</option>
+        <option class="한화" value="?team=한화">한화</option>
+      </select>
+    </div>
+    <div class="container">
+        {% if article_list %}
+        <ul class="list">
+            {% for article in article_list %}
+            <li class="item">
+                <h3><a href="{% url 'manager:reinforce' article.id%}" style="color: black">{{ article.article_title }}</a></h3>
+                <div class="info">
+                    <div class="written_team"><span>구단 | </span>{{ article.article_team }}</div>
+                    <div class="written_time"><span>작성한 날짜 | </span>{{ article.written_date|slice:"4:6"}}월 {{ article.written_date|slice:"6:8"}}일 {{ article.written_time }}</div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <li>
+          <div class="title">기사가 없습니다.</div>
+        </li>
+        {% endif %}
+    </div>
+        <!-- 페이징처리 시작 -->
+    <div id="paging">
+        <ul class="pagination justify-content-center" style="margin-top: 2rem;">
+            <!-- 이전페이지 -->
+            {% if article_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'manager:article_list' %}?&page={{ article_list.previous_page_number }}">이전</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+            </li>
+            {% endif %}
+            <!-- 페이지리스트 -->
+            {% for page_number in article_list.paginator.page_range %}
+            {% if page_number == article_list.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="{% url 'manager:article_list' %}?&page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'manager:article_list' %}?&page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            <!-- 다음페이지 -->
+            {% if article_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'manager:article_list' %}?&page={{ article_list.next_page_number }}">다음</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+
+    <div>
+        <ul class="bottomDateList" style="list-style:none; margin-left: 18%;">
+            {% for date in dates %}
+            <li class="date" style="display: inline;">
+                <a id ="date" href="{% url 'manager:article_list' %}?team={{ team_text }}&date={{ date | urlencode }}" style="color: black">{{ date }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    </form>
+
+<script src="{% static 'jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/article.js' %}"></script>
+<script>
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+$(document).ready(function(){
+  var team = getUrlParameter('team');
+  if(team == '삼성'){
+    $('.삼성').prop('selected', 'selected')
+  }else if(team == '롯데'){
+    $('.롯데').prop('selected', 'selected')
+  }else if(team == 'NC'){
+    $('.NC').prop('selected', 'selected')
+  }else{
+    $('.전체').prop('selected', 'selected')
+  }
+});
+</script>
+
+{% endblock %}

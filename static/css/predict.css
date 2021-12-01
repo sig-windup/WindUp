@@ -1,0 +1,69 @@
+#winlose {
+    display : flex;
+    flex-direction: row;
+    text-align: center;
+    font-size : 18px;
+    align-items: center;
+    justify-content: center;
+}
+
+#choice {
+    margin-top : 10rem;
+    margin-right : 5rem;
+
+}
+
+#together {
+    text-align: center;
+    font-size : 16px;
+    margin-top: 3rem;
+}
+
+
+#gameDates {
+    text-align: center;
+    margin-top : 3rem;
+    font-weight: bold;
+}
+
+
+#game {
+    display : flex;
+    flex-direction : row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 35px;
+    font-weight: normal;
+
+}
+
+#awayTeams, #homeTeams {
+    text-align: center;
+    width : 25rem;
+}
+
+#awayTeam, #homeTeam {
+    width : 300px;
+    height: 300px;
+}
+
+#awayTeam > div, #homeTeam > div{
+    font-size: 30px;
+}
+
+#whoIsWinner {
+    margin-top : 3rem;
+    margin-bottom : 5rem;
+}
+
+
+#static1, #static2, #static3 {
+    font-size : 20px;
+}
+
+
+#variable1, #variable2, #variable3 {
+    font-weight: bold;
+    color : red;
+    font-size : 22px;
+}

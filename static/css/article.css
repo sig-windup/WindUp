@@ -1,0 +1,54 @@
+.header {
+    background-color: #000000;
+    color: white;
+    padding: 20px 30px;
+    border-bottom: 1px solid #000000;
+    margin-bottom: 20px;
+
+}
+
+.header h1 {
+    font-size: 40px;
+    font-weight: bolder;
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:link {
+  color: #000000;
+}
+
+.item{
+    overflow: hidden;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.item h3 {
+    font-weight: bolder;
+}
+
+.info {
+    display: inline-block;
+    float: right;
+    font-size: 13px;
+    color: #000000;
+    margin-top: 10px;
+}
+
+.info span {
+    font-weight: bold;
+}
+
+.bottomDateList{
+    list-style:none;
+}
+
+.date{
+    margin: 5%;
+}

@@ -1,0 +1,107 @@
+<!--상속-->
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap');
+      * {
+        font-family: 'Noto Serif KR', serif;
+<!--        font-size: 30px;-->
+      }
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> 승패예측 페이지</title>
+    <link rel="stylesheet" href="{% static 'css/predict.css' %}">
+<!--            <link href="predict.css" rel="stylesheet" type="text/css">-->
+    <!--        <script type="text/javascript" src="winLose.js"></script>-->
+</head>
+<body>
+<div id="winlose">
+    <div id = "choice">
+        <form method="get" action="" class="form">
+            <input type="date" id="gameDate" name="dates">
+            <div id="together">
+                {% if matches %}
+                <div id="sideMenu">
+                    <ul>
+                        {% for match in matches %}
+                        <div>
+                            <input type="radio" name="game" value="{{ match.id }}">
+                                {{match.away }} vs {{ match.home}} </input>
+                        </div>
+                        {% endfor %}
+                    </ul>
+                    <p> 최근
+                        <input type="radio" name="period" value="1">1일
+                        <input type="radio" name="period" value="3">3일
+                        <input type="radio" name="period" value="7">7일
+                        의 분위기를 반영합니다.
+                    </p>
+
+                    <input type="submit">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id=mainSection>
+        <div id="gameDates">
+            <div> 오늘은 {{ game_info.date }} 일입니다.</div>
+            <div id = "game">
+                <div id="awayTeams">
+                    <div>{{ game_info.away }}</div>
+                    <img id="awayTeam" src="{% get_static_prefix %}img/predict/{{ game_info.away }}{{ game_info.date }}_{{ period }}.PNG" height=100px>
+        <!--            {% for away_player in away_players %}-->
+                   <h5> {{ away_player.name }} </h5>
+        <!--            {% endfor %}-->
+                </div>
+                <div id="gameInfo">
+                    <h4> VS </h4>
+                    <p> {{ game_info.stadium }} </p>
+                </div>
+                <div id="homeTeams">
+                    <div>{{ game_info.home }}</div>
+                    <img id="homeTeam" src="{% get_static_prefix %}img/predict/{{ game_info.home }}{{ game_info.date }}_{{ period }}.PNG" height=100px>
+        <!--            {% for home_player in home_players %}-->
+                   <h5> {{ home_player.name }} </h5>
+        <!--            {% endfor %}-->
+                </div>
+            </div>
+        </div>
+
+    <div id="whoIsWinner">
+        <p id="static1"> 전력은 <label id="variable1">{{ stat_upper }}</label> 이(가) 더 우세합니다.</p>
+        <p id="static2"> 기세는 <label id="variable2">{{ article_upper }}</label> 이(가) 더 우세합니다.</p>
+        <p id="static3"> 오늘은 <label id="variable3">(우세팀)</label>의 승리가 예상됩니다!</p>
+    </div>
+
+    {% else %}
+    <div id="warning">
+        <input type="date" id="gameDate1" name="dates">
+        <br>
+        오늘은 경기가 없습니다.
+    </div>
+    <input type="submit"></p>
+    <p> 최근
+        <input type="radio" name="period" value="1">1일
+        <input type="radio" name="period" value="3">3일
+        <input type="radio" name="period" value="7">7일
+        의 분위기를 반영합니다.
+    </p>
+    {% endif %}
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+    function getPeriod(event) {
+        document.getElementsByName('period').innerText =
+            event.target.value;
+    }
+
+</script>
+
+{% endblock %}

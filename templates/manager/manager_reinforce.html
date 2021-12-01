@@ -1,0 +1,64 @@
+<!--상속-->
+{% extends 'manager_base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/reinforce.css?we">
+
+<div class="title">
+    <h1>{{article.article_title}}</h1>
+</div>
+
+<div class="wrapper">
+
+    <span class="prev">《</span>
+
+    <span class="next">》</span>
+
+    <div class="scroll">
+        <ul>
+            {% for article_text in article_texts %}
+            <li class="item">
+                <a>{{article_text}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="reinforce">
+    <input type="button" class="pos" name="{{ article.id }}" value="긍정">
+    <input type="button" class="fence" name="{{ article.id }}" value="중립">
+    <input type="button" class="neg" name="{{ article.id }}" value="부정">
+</div>
+
+<script src="{% static 'jquery-3.6.0.min.js' %}"></script>
+<script>
+    $(function(){
+        var oScroll=$('.scroll>ul'),oLi=oScroll.find('li'),oLen=oLi.length,oPrev=$('.prev'),oNext=$('.next'),oWidth=oLi.eq(0).outerWidth(true),iNow= 1,oCur=$('.count>em'),oCount=$('.count>i'),iTimer=null;
+        oScroll.width(oWidth*oLen);
+        oCount.html(oLen);
+        function count(){
+            oCur.html(iNow);
+        }
+
+        function Prev(){
+            oScroll.css({marginLeft:-oWidth+'px'}).find('li:last').prependTo(oScroll);
+            oScroll.stop(true,true).animate({marginLeft:0+'px'},600);
+            iNow=iNow>1?iNow-1:oLen;
+            count(iNow);
+        }
+
+        function Next(){
+            oScroll.stop(true,true).animate({marginLeft:-oWidth+'px'},600,function(){
+            oScroll.css({marginLeft:0}).find('li:first').appendTo(oScroll);
+            })
+            iNow=iNow<oLen?iNow+1:1;
+            count(iNow);
+        }
+        oPrev.bind('click',Prev);
+        oNext.bind('click',Next);
+
+    })
+</script>
+
+{% endblock %}
