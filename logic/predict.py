@@ -5,6 +5,7 @@ from logic.predict_with_stat import get_players, make_hitter_objects, pitcher_WA
 from predict.models import Starting_lineup, Pitcher_stats, Hitter_stats
 from article.models import Articles
 import datetime
+import os
 
 def before_day_str(date, period):
     datetype = datetime.datetime.strptime(date, "%Y%m%d")
@@ -15,6 +16,10 @@ def before_day_str(date, period):
 
 def article_based(away, home, period, date):
     before = before_day_str(date, period)
+    if away == "SSG":
+        away = "SK"
+    if home == "SSG":
+        home = "SK"
     away_articles_objects = Articles.objects.filter(team=away, date__gte=before, date__lte=date)
     away_articles = get_contents(away_articles_objects)
     away_score = positive_score(away_articles)
@@ -24,15 +29,24 @@ def article_based(away, home, period, date):
 
     away_whole_keyword = ''
     home_whole_keyword = ''
-    for a in away_articles:
-        tenkey = top10keywords(a)
-        away_whole_keyword += arr2str(tenkey)
-    load_predict_wordcloud(away, away_whole_keyword, date, period)
 
-    for h in home_articles:
-        tenkey = top10keywords(h)
-        home_whole_keyword += arr2str(tenkey)
-    load_predict_wordcloud(home, home_whole_keyword, date, period)
+    if away == "SK":
+        away = "SSG"
+    if home == "SK":
+        home = "SSG"
+
+    path = 'C:/Users/DeepLearning_1/PycharmProjects/WindUp/static/img/predict/'
+
+    if not os.path.exists(path + away + date + '_' + period + '.png'):
+        for a in away_articles:
+            tenkey = top10keywords(a)
+            away_whole_keyword += arr2str(tenkey)
+        load_predict_wordcloud(away, away_whole_keyword, date, period)
+
+        for h in home_articles:
+            tenkey = top10keywords(h)
+            home_whole_keyword += arr2str(tenkey)
+        load_predict_wordcloud(home, home_whole_keyword, date, period)
 
     if away_score > home_score:
         return away
@@ -45,8 +59,8 @@ def stat_based(away, home, date):
     home_lineup_objects = Starting_lineup.objects.filter(date=date, team=home)
     home_lineup = get_players(home_lineup_objects)
 
-    print('원정:', away_lineup)
-    print('홈:', home_lineup)
+    # print('원정:', away_lineup)
+    # print('홈:', home_lineup)
 
     away_sp = away_lineup[0]
     away_hitters = away_lineup[1:]

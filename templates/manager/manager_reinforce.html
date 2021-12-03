@@ -2,6 +2,12 @@
 {% extends 'manager_base.html' %}
 {% load static %}
 {% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap');
+      .calender,.highlight{
+        font-family: 'Noto Serif KR', serif;
+      }
+    </style>
 <link rel="stylesheet" href="/static/css/reinforce.css?we">
 
 <div class="title">
@@ -10,25 +16,26 @@
 
 <div class="wrapper">
 
-    <span class="prev">《</span>
+<!--    <span class="prev">《</span>-->
 
-    <span class="next">》</span>
+<!--    <span class="next">》</span>-->
 
     <div class="scroll">
         <ul>
-            {% for article_text in article_texts %}
             <li class="item">
-                <a>{{article_text}}</a>
+                <a>{{ article_texts }}</a>
             </li>
-            {% endfor %}
         </ul>
     </div>
 </div>
 
 <div class="reinforce">
-    <input type="button" class="pos" name="{{ article.id }}" value="긍정">
-    <input type="button" class="fence" name="{{ article.id }}" value="중립">
-    <input type="button" class="neg" name="{{ article.id }}" value="부정">
+    <form method="post">
+        <input type="radio" class="pos" name="judge" value="긍정">긍정
+        <input type="radio" class="fence" name="judge" value="중립">중립
+        <input type="radio" class="neg" name="judge" value="부정">부정
+        <input type="submit">
+    </form>
 </div>
 
 <script src="{% static 'jquery-3.6.0.min.js' %}"></script>

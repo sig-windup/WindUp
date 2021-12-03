@@ -2,12 +2,17 @@
 {% extends 'manager_base.html' %}
 {% load static %}
 {% block content %}
-
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap');
+      .calender,.highlight{
+        font-family: 'Noto Serif KR', serif;
+      }
+    </style>
 <link rel="stylesheet" href="{% static 'css/article.css' %}">
     <div class="header">
         <h1>뉴스</h1>
     </div>
-
+    <button type="button" class="navyBtn" onClick="location.href='{% url 'manager:reinforce' %}'">강화학습</button>
     <form method="get" action="" class="form" >
         <div style="margin-left: 80%; margin-top: 2%;">
         팀 선택
@@ -30,10 +35,10 @@
         <ul class="list">
             {% for article in article_list %}
             <li class="item">
-                <h3><a href="{% url 'manager:reinforce' article.id%}" style="color: black">{{ article.article_title }}</a></h3>
+                <h3><a href="{% url 'manager:judge_article' article.id%}" style="color: black">{{ article.title }}</a></h3>
                 <div class="info">
-                    <div class="written_team"><span>구단 | </span>{{ article.article_team }}</div>
-                    <div class="written_time"><span>작성한 날짜 | </span>{{ article.written_date|slice:"4:6"}}월 {{ article.written_date|slice:"6:8"}}일 {{ article.written_time }}</div>
+                    <div class="written_team"><span>구단 | </span>{{ article.team }}</div>
+                    <div class="written_time"><span>작성한 날짜 | </span>{{ article.date|slice:"4:6"}}월 {{ article.date|slice:"6:8"}}일 {{ article.time }}</div>
                 </div>
             </li>
             {% endfor %}

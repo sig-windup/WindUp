@@ -38,5 +38,5 @@ def load_predict_wordcloud(team, text, date, period):
     # plt.imshow(wordcloud, interpolation='lanczos')  # 이미지의 부드럽기 정도
     # plt.axis('off')  # x y축 제거
     # plt.savefig(absolute + 'highlight/' + date + '.png')  # 파일명으로 저장
-    wordcloud.to_file(absolute + 'predict/' + team + date + '_' + period+ '.png')
+    wordcloud.to_file(absolute + 'predict/' + team + date + '_' + period + '.png')
 

@@ -9,11 +9,12 @@ from datetime import datetime, timedelta
 from django.utils.dateformat import DateFormat
 
 def date_range():
-    today = DateFormat(datetime.now()).format('ymd')
+    today = DateFormat(datetime(2021,10,5)).format('ymd') #날짜 변경 수정
     start = datetime.strptime(today, "%y%m%d") - timedelta(days=4)
     dates = [(start + timedelta(days=i)).strftime("20%y-%m-%d") for i in range(5)]
     return dates
 
+# 기사 오류 해결
 def article_list(request):
     """
     template 출력
@@ -21,25 +22,28 @@ def article_list(request):
     page = request.GET.get('page','1') #GET 방식으로 정보를 받아오는 데이터
     team_text = request.GET.get('team')
     date = request.GET.get('date')
+    print(date, type(date))
     dates = date_range()
-    if(date != None):
-        date_conver = date.replace("-","")
+
+    if (date == None):
+        date = dates[3]
     else:
-        date_conver = dates[3].replace("-","")
-    print(date_conver)
+        if (date == 'None'):
+            date = dates[3]
+    date = date.replace("-", "")
+
+    if (team_text == None):
+        team_text = '전체'
+    else:
+        if (team_text == 'None'):
+            team_text = '전체'
+
     #dates[4] = 현재 날짜
-    if(team_text != '전체' and team_text != None and date != None):
-        article = Articles.objects.filter(team=team_text,date=date_conver)#.order_by('-written_time')
+    if(team_text != '전체'):
+        article = Articles.objects.filter(team=team_text,date=date)#.order_by('-written_time')
     #팀만 선택할 경우 기본 값으로 오늘로 가게된다.
-    elif(team_text == None and date == None):
-        article = Articles.objects.filter(date=date_conver)#.order_by('-written_time')
-        print("제발")
-    elif(team_text == '전체' and date == None):
-        article = Articles.objects.filter(date=date_conver)#.order_by('-written_time')
-    elif(team_text == '전체' and date != None):
-        article = Articles.objects.filter(date=date_conver)#.order_by('-written_time')
     else:
-        article = Articles.objects.filter(team=team_text, date=date_conver)#.order_by('-written_time')
+        article = Articles.objects.filter(date=date)#.order_by('-written_time')
 
     #페이지네이션
     paginator = Paginator(article, '10') #Paginator(분할될 객체, 페이지 당 담길 객체수)

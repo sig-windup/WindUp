@@ -11,42 +11,39 @@ def match_list(request) :
     today = DateFormat(datetime.datetime.now()).format('Ymd')
     date = request.GET.get('dates')
     game = request.GET.get('game')
-    if date is None :
-        date_conver = today
+
+    if date is None or date == '' :
+        # 시작일 지정
+        date_conver = "20211005"
     else :
         date_conver = date.replace("-", "")
-
     matches = Matches.objects.filter(date=date_conver).order_by('id')
-
-    context = {
-        'matches': matches,
-        # 'game_info': game_info,
-        'date': date,
-        # 'article_upper': article_upper,
-        # 'stat_upper': stat_upper,
-        # 'both_upper': both_upper,
-    }
 
     if game is not None:
         game_info = findMatch(game)
         away = game_info['away']
         home = game_info['home']
         period = request.GET.get('period')
+    else:
+        game_info = matches[0]
+        away = game_info.away
+        home = game_info.home
+        period = request.GET.get('period')
+        if period is None:
+            period = "1"
 
-        article_upper = article_based(away, home, period, date_conver)
-        stat_upper = stat_based(away, home, date_conver)
-        print(article_upper, "우세")
-        print(stat_upper, "우세")
+    article_upper = article_based(away, home, period, date_conver)
+    stat_upper = stat_based(away, home, date_conver)
 
-        context = {
-            'matches' : matches,
-            'game_info' : game_info,
-            'period': period,
-            'date' : date,
-            'article_upper': article_upper,
-            'stat_upper': stat_upper,
-            # 'both_upper': both_upper,
-        }
+    context = {
+        'matches': matches,
+        'game_info': game_info,
+        'period': period,
+        'date': date,
+        'article_upper': article_upper,
+        'stat_upper': stat_upper,
+        # 'both_upper': both_upper,
+    }
 
     return render(request, 'predict/predict.html', context)
 
