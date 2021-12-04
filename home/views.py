@@ -11,7 +11,7 @@ from logic.find_keyword import top10keywords, arr2str
 def index(request):
     #stategame이 없을 경우 게임예정이다 -> score, result 모두 에도 점수가 없다.
 
-    date = "20211005"
+    date = "20210922"
     matches = Matches.objects.filter(date=date)
 
     path = 'C:/Users/DeepLearning_1/PycharmProjects/WindUp/static/img/highlight/'

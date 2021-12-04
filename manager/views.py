@@ -9,7 +9,7 @@ from article.models import Articles
 from logic.store_judge import storeDB, makeCSV, start_reinforce
 
 def date_range():
-    today = DateFormat(datetime(2021,10,5)).format('ymd')
+    today = DateFormat(datetime(2021,9,22)).format('ymd')
     start = datetime.strptime(today, "%y%m%d") - timedelta(days=4)
     dates = [(start + timedelta(days=i)).strftime("20%y-%m-%d") for i in range(5)]
     return dates

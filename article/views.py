@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from django.utils.dateformat import DateFormat
 
 def date_range():
-    today = DateFormat(datetime(2021,10,5)).format('ymd') #날짜 변경 수정
+    today = DateFormat(datetime(2021,9,22)).format('ymd') #날짜 변경 수정
     start = datetime.strptime(today, "%y%m%d") - timedelta(days=4)
     dates = [(start + timedelta(days=i)).strftime("20%y-%m-%d") for i in range(5)]
     return dates

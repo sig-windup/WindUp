@@ -8,6 +8,19 @@
         font-family: 'Noto Serif KR', serif;
 <!--        font-size: 30px;-->
       }
+    progress {
+        background: {{ away_team_obj.color }};
+    }
+
+    progress::-webkit-progress-bar {
+        background: {{ home_team_obj.color }};
+    }
+
+    progress::-webkit-progress-value {
+        background: {{ away_team_obj.color }};
+    }
+}
+
 </style>
 <!DOCTYPE html>
 <html>
@@ -30,7 +43,7 @@
                         {% for match in matches %}
                         <div>
                             <input type="radio" name="game" value="{{ match.id }}">
-                                {{match.away }} vs {{ match.home}} </input>
+                                {{ match.away }} vs {{ match.home }} </input>
                         </div>
                         {% endfor %}
                     </ul>
@@ -49,35 +62,62 @@
 
     <div id=mainSection>
         <div id="gameDates">
-            <div> 오늘은 {{ game_info.date }} 일입니다.</div>
+            <div> <h2>{{ game_info.date|slice:"0:4" }}년 {{ game_info.date|slice:"4:6" }}월 {{ game_info.date|slice:"6:8" }}일</h2></div>
             <div id = "game">
                 <div id="awayTeams">
-                    <div>{{ game_info.away }}</div>
-                    <img id="awayTeam" src="{% get_static_prefix %}img/predict/{{ game_info.away }}{{ game_info.date }}_{{ period }}.PNG" height=100px>
-        <!--            {% for away_player in away_players %}-->
+                    <div><h3>{{ away_team_obj.team_name }}</h3></div>
+                    {% if game_info.state_game == '' %}
+                    <img class="awayTeam" src="{% get_static_prefix %}img/predict/{{ game_info.away }}{{ game_info.date }}_{{ period }}.PNG" height="300px">
+                    {% else %}
+                    <img class="awayTeam" src="{% get_static_prefix %}img/highlight/{{ game_info.away }}{{ game_info.date }}.PNG" height="400px">
+                    {% endif%}        <!--            {% for away_player in away_players %}-->
                    <h5> {{ away_player.name }} </h5>
         <!--            {% endfor %}-->
                 </div>
                 <div id="gameInfo">
+                    <p> {{ game_info.state_game }} </p>
                     <h4> VS </h4>
                     <p> {{ game_info.stadium }} </p>
                 </div>
                 <div id="homeTeams">
-                    <div>{{ game_info.home }}</div>
-                    <img id="homeTeam" src="{% get_static_prefix %}img/predict/{{ game_info.home }}{{ game_info.date }}_{{ period }}.PNG" height=100px>
+                    <div><h3>{{ home_team_obj.team_name }}</h3></div>
+                    {% if game_info.state_game == '' %}
+                    <img class="homeTeam" src="{% get_static_prefix %}img/predict/{{ game_info.home }}{{ game_info.date }}_{{ period }}.PNG" height="300px">
+                    {% else %}
+                    <img class="homeTeam" src="{% get_static_prefix %}img/highlight/{{ game_info.home }}{{ game_info.date }}.PNG" height="400px">
+                    {% endif%}
         <!--            {% for home_player in home_players %}-->
                    <h5> {{ home_player.name }} </h5>
         <!--            {% endfor %}-->
                 </div>
             </div>
         </div>
-
+    {% if game_info.state_game == '' %}
     <div id="whoIsWinner">
         <p id="static1"> 전력은 <label id="variable1">{{ stat_upper }}</label> 이(가) 더 우세합니다.</p>
         <p id="static2"> 기세는 <label id="variable2">{{ article_upper }}</label> 이(가) 더 우세합니다.</p>
-        <p id="static3"> 오늘은 <label id="variable3">{{ winning_rate }} 의 확률로 {{ both_upper }}</label>의 승리가 예상됩니다!</p>
+        {% if both_upper == 'away' %}
+        <div style=" margin-left:25%">
+        <div style="float:left; margin-right:2%;"> {{ game_info.away }} </div>
+        <div class="progressbar" style="float: left;"><progress class="progressbar" value="{{ winning_rate }}" max="100"></progress></div>
+        <div style="float:right; margin-right: 43%;">{{ game_info.home }} </div>
+        <br>
+        <div><p class="static3"> 오늘은 {{ winning_rate }}%의 확률로 <label class="variable3">{{ game_info.away }}</label>의 승리가 예상됩니다!</p></div>
+        </div>
+        {% else %}
+        <div style=" margin-left:25%">
+        <div style="float:left; margin-right:2%;"> {{ game_info.away }} </div>
+        <div class="progressbar" style="float: left;"><progress class="progressbar" value="{{ opposite_rate }}" max="100"></progress></div>
+        <div style="float:right; margin-right: 43%;">{{ game_info.home }} </div>
+        </div>
+        <br>
+        <div><p class="static3"> 오늘은 {{ winning_rate }}%의 확률로 <label class="variable3">{{ game_info.home }}</label>의 승리가 예상됩니다!</p></div>
+        {% endif %}
     </div>
-
+    {% else %}
+        <br>
+        <h1>{{ game_info.away_score }} : {{ game_info.home_score }}</h1>
+    {% endif %}
     {% else %}
     <div id="warning">
         <input type="date" id="gameDate1" name="dates">
@@ -102,7 +142,20 @@
         document.getElementsByName('period').innerText =
             event.target.value;
     }
-
+</script>
+<script>
+    cnt = 0;
+    stopCheck = false;
+    value = document.getElementsByTagName('progress')[0].value;
+    setInterval(function(){
+        if(stopCheck == false) {
+            document.getElementsByTagName('progress')[0].value = cnt;
+            cnt++;
+            if (cnt > value) {
+                stopCheck = true;
+            }
+        }
+    },value);
 </script>
 
 {% endblock %}

@@ -14,9 +14,9 @@ import random
 import time
 import datetime
 
-output_model_file = 'C:/Users/DeepLearning_1/WindUp/neutposnega_model_ver3.1/pytorch_model.bin'
-output_config_file = 'C:/Users/DeepLearning_1/WindUp/neutposnega_model_ver3.1/config.json'
-output_vocab_file = 'C:/Users/DeepLearning_1/WindUp/neutposnega_model_ver3.1/vocab.txt'
+output_model_file = 'C:/Users/DeepLearning_1/WindUp/neutposnega_model_ver3.2/pytorch_model.bin'
+output_config_file = 'C:/Users/DeepLearning_1/WindUp/neutposnega_model_ver3.2/config.json'
+output_vocab_file = 'C:/Users/DeepLearning_1/WindUp/neutposnega_model_ver3.2/vocab.txt'
 
 config = BertConfig.from_json_file(output_config_file)
 model = BertForSequenceClassification(config)
@@ -36,11 +36,8 @@ else:
 # 디바이스 설정
 if torch.cuda.is_available():
     device = torch.device("cuda")
-    print('There are %d GPU(s) available.' % torch.cuda.device_count())
-    print('We will use the GPU:', torch.cuda.get_device_name(0))
 else:
     device = torch.device("cpu")
-    print('No GPU available, using the CPU instead.')
 
 
 # 입력 데이터 변환

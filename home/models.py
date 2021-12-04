@@ -25,6 +25,7 @@ class Teams(models.Model):
     team_code = models.CharField(db_column='team_code', max_length=50)  # Field name made lowercase.
     team_img = models.CharField(db_column='team_img', max_length=50)  # Field name made lowercase.
     team_stadium = models.CharField(db_column='team_stadium', max_length=50)  # Field name made lowercase.
+    color = models.CharField(db_column='color', max_length=50)
 
     class Meta:
         managed = False

@@ -23,7 +23,7 @@ def article_based(away, home, period, date):
     away_articles_objects = Articles.objects.filter(team=away, date__gte=before, date__lte=date)
     away_articles = get_contents(away_articles_objects)
     away_score = positive_score(away_articles)
-    home_articles_objects = Articles.objects.filter(team=away, date__gte=before, date__lte=date)
+    home_articles_objects = Articles.objects.filter(team=home, date__gte=before, date__lte=date)
     home_articles = get_contents(home_articles_objects)
     home_score = positive_score(home_articles)
 
@@ -49,9 +49,9 @@ def article_based(away, home, period, date):
         load_predict_wordcloud(home, home_whole_keyword, date, period)
 
     if away_score > home_score:
-        return away
+        return away, away_score, home_score
     else:
-        return home
+        return home, away_score, home_score
 
 def stat_based(away, home, date):
     away_lineup_objects = Starting_lineup.objects.filter(date=date, team=away)
@@ -59,8 +59,8 @@ def stat_based(away, home, date):
     home_lineup_objects = Starting_lineup.objects.filter(date=date, team=home)
     home_lineup = get_players(home_lineup_objects)
 
-    # print('원정:', away_lineup)
-    # print('홈:', home_lineup)
+    print('원정:', away_lineup)
+    print('홈:', home_lineup)
 
     away_sp = away_lineup[0]
     away_hitters = away_lineup[1:]
@@ -79,10 +79,33 @@ def stat_based(away, home, date):
     home_team_WAR = team_WAR(home_hitters_objects, home_sp_war)
 
     if away_team_WAR > home_team_WAR:
-        return away
+        return away, away_team_WAR, home_team_WAR
     else:
-        return home
+        return home, away_team_WAR, home_team_WAR
 
 
-def both_based(away, home):
-    return
+def both_based(away_positive_score, home_positive_score, away_war, home_war):
+    print('긍정도', away_positive_score, home_positive_score)
+    print('WAR 합산', away_war, home_war)
+    total_war = away_war + home_war
+    away_war_rate = away_war / total_war
+    home_war_rate = home_war / total_war
+    print('WAR 비율', away_war_rate, home_war_rate)
+    if away_war < 0 and home_war < 0:
+        tmp = home_war_rate
+        home_war_rate = away_war_rate
+        away_war_rate = tmp
+
+    away_score = away_positive_score + away_war_rate
+    home_score = home_positive_score + home_war_rate
+    print('점수', away_score, home_score)
+
+    total_score = away_score + home_score
+    total_away_score = away_score / total_score
+    total_home_score = home_score / total_score
+    print('승리비율', total_away_score, total_home_score)
+
+    if total_away_score > total_home_score:
+        return 'away', total_away_score
+    else:
+        return 'home', total_home_score
