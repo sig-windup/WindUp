@@ -7,6 +7,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Articles
 from datetime import datetime, timedelta
 from django.utils.dateformat import DateFormat
+from users.models import User
+from home.models import Teams
 
 def date_range():
     today = DateFormat(datetime(2021,9,22)).format('ymd') #날짜 변경 수정
@@ -29,11 +31,22 @@ def article_list(request):
             date = dates[3]
     date = date.replace("-", "")
 
-    if (team_text == None):
-        team_text = '전체'
+    if request.session.get('user'):
+        id = request.session['user']
+        user = User.objects.get(user_id=id)
+        favorite_team = Teams.objects.get(team_id=user.team_id)
+        favorite_team_text = favorite_team.team_code
+        if (team_text == None):
+            team_text = favorite_team_text
+        else:
+            if (team_text == 'None'):
+                team_text = favorite_team_text
     else:
-        if (team_text == 'None'):
+        if (team_text == None):
             team_text = '전체'
+        else:
+            if (team_text == 'None'):
+                team_text = '전체'
 
     #dates[4] = 현재 날짜
     if(team_text != '전체'):
@@ -49,12 +62,12 @@ def article_list(request):
     if request.session.get('user'):
         id = request.session['user']
         context = {
-                'id': id,
-                'team_text': team_text,
-                'article_list': article_list,
-                'dates': dates,
-                'date': date,
-            }
+            'id': id,
+            'team_text': team_text,
+            'article_list': article_list,
+            'dates': dates,
+            'date': date,
+        }
     else:
         context = {
             'team_text': team_text,

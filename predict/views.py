@@ -9,6 +9,9 @@ from logic.make_wordcloud import load_highlight_wordcloud
 from predict.models import *
 from logic.predict import *
 from article.models import Articles
+from users.models import User
+from django.db.models import Q
+
 # Create your views here.
 def match_list(request) :
     today = DateFormat(datetime.datetime(2021,9,22)).format('Ymd')
@@ -30,7 +33,14 @@ def match_list(request) :
         if period is None:
             period = "1"
     else:
-        game_info = matches[0]
+        if request.session.get('user'):
+            id = request.session['user']
+            user = User.objects.get(user_id=id)
+            favorite_team = Teams.objects.get(team_id=user.team_id)
+            favorite_team_text = favorite_team.team_code
+            game_info = Matches.objects.get(Q(date=date_conver), Q(away=favorite_team_text) | Q(home=favorite_team_text))
+        else:
+            game_info = matches[0]
         game_info = model_to_dict(game_info)
         away = game_info['away']
         home = game_info['home']
