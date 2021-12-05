@@ -53,20 +53,36 @@ def match_list(request) :
         winning_rate *= 100
         winning_rate = round(winning_rate, 1)
         print(away_team_obj.team_name, home_team_obj.team_name)
-
-        context = {
-            'matches': matches,
-            'game_info': game_info,
-            'period': period,
-            'date': date,
-            'article_upper': article_upper,
-            'stat_upper': stat_upper,
-            'both_upper': both_upper,
-            'winning_rate': winning_rate,
-            'opposite_rate': 100 - winning_rate,
-            'away_team_obj': away_team_obj,
-            'home_team_obj': home_team_obj,
-        }
+        if request.session.get('user'):
+            id = request.session['user']
+            context = {
+                'id': id,
+                'matches': matches,
+                'game_info': game_info,
+                'period': period,
+                'date': date,
+                'article_upper': article_upper,
+                'stat_upper': stat_upper,
+                'both_upper': both_upper,
+                'winning_rate': winning_rate,
+                'opposite_rate': 100 - winning_rate,
+                'away_team_obj': away_team_obj,
+                'home_team_obj': home_team_obj,
+            }
+        else:
+            context = {
+                'matches': matches,
+                'game_info': game_info,
+                'period': period,
+                'date': date,
+                'article_upper': article_upper,
+                'stat_upper': stat_upper,
+                'both_upper': both_upper,
+                'winning_rate': winning_rate,
+                'opposite_rate': 100 - winning_rate,
+                'away_team_obj': away_team_obj,
+                'home_team_obj': home_team_obj,
+            }
     else:
         if away == "SSG":
             away = "SK"
@@ -94,15 +110,26 @@ def match_list(request) :
                 tenkey = top10keywords(a.content)
                 whole_keyword += arr2str(tenkey)
             load_highlight_wordcloud(home, whole_keyword, date_conver)
-
-        context = {
-            'matches': matches,
-            'game_info': game_info,
-            'period': period,
-            'date': date,
-            'away_team_obj': away_team_obj,
-            'home_team_obj': home_team_obj,
-        }
+        if request.session.get('user'):
+            id = request.session['user']
+            context = {
+                'id': id,
+                'matches': matches,
+                'game_info': game_info,
+                'period': period,
+                'date': date,
+                'away_team_obj': away_team_obj,
+                'home_team_obj': home_team_obj,
+            }
+        else:
+            context = {
+                'matches': matches,
+                'game_info': game_info,
+                'period': period,
+                'date': date,
+                'away_team_obj': away_team_obj,
+                'home_team_obj': home_team_obj,
+            }
     return render(request, 'predict/predict.html', context)
 
 def findMatch(match_id):

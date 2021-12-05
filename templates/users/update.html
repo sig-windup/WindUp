@@ -1,0 +1,33 @@
+<form action="" method="post">
+    {% csrf_token %}
+    <div id="updateInfo">
+        <h3>회원 정보 수정</h3>
+        <div id="enterInfo">
+            <div class="a">
+                <label>변경할 비밀번호 :
+                    <input id="pwd" type="password" name="user_pwd" placeholder="비밀번호를 입력하세요." autofocus required>
+                </label>
+            </div>
+            <div class="a">
+                <label>선호구단 :
+                    <select id="team" name="team">
+                        <option value="OB">두산 베어스</option>
+                        <option value="LT">롯데 자이언츠</option>
+                        <option value="SS">삼성 라이온즈</option>
+                        <option value="WO">키움 히어로스</option>
+                        <option value="HH">한화 이글스</option>
+                        <option value="HT">KIA 타이거즈</option>
+                        <option value="KT">KT 위즈</option>
+                        <option value="LG">LG 트윈스</option>
+                        <option value="NC">NC 다이노스</option>
+                        <option value="SK">SSG 랜더스</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <input id="update" type="submit" value="수정">
+        <a href="{% url 'users:delete' %}"> 탈퇴 </a>
+    </div>
+</form>
+</body>
+</html>

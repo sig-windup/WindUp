@@ -1,0 +1,102 @@
+<!--회원가입 페이지-->
+<title> 회원가입 </title>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <div id="joinMember">
+        <h3>회원 가입</h3>
+        <div id="joinInfo">
+            <div class="id_field">
+                <label>아이디 :
+                    <input id="user_id" type="text" name="user_id" placeholder="영문자와 숫자로 구성된 아이디를 입력하세요." autofocus
+                           required>
+                    <button type="button" id="checkIdDup" onclick=checkDup()>중복확인</button>
+                    <input type="hidden" id="idcheck" value="0"/>
+                </label>
+            </div>
+            <div class="pwd_field">
+                <label>비밀번호 :
+                    <input id="user_pwd" type="password" name="user_pwd" placeholder="비밀번호를 입력하세요." required>
+                </label>
+            </div>
+
+            <div class="a">
+                <label>선호구단 :
+                    <select id="b" name="team">
+                        <option value="OB">두산 베어스</option>
+                        <option value="LT">롯데 자이언츠</option>
+                        <option value="SS">삼성 라이온즈</option>
+                        <option value="WO">키움 히어로스</option>
+                        <option value="HH">한화 이글스</option>
+                        <option value="HT">KIA 타이거즈</option>
+                        <option value="KT">KT 위즈</option>
+                        <option value="LG">LG 트윈스</option>
+                        <option value="NC">NC 다이노스</option>
+                        <option value="SK">SSG 랜더스</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div id="joinMembers">
+            <input id="join" type="submit" value="가입하기" onclick="return join()">
+        </div>
+    </div>
+</form>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center"
+     role="alert">
+        <botton type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true"> &times; </span>
+        </botton>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% else %}
+{% endif %}
+
+<script>
+    function join() {
+        user_id = document.getElementById("user_id").value;
+        if (user_id == '') {
+            alert("아이디는 필수 항목입니다.");
+            document.getElementById("user_id").focus();
+            return false;
+        }
+
+        user_pwd = document.getElementById("user_pwd").value;
+        if (user_pwd == "") {
+            alert("비밀번호는 필수 항목입니다.");
+            document.getElementById("user_pwd").focus();
+            return false;
+        }
+        check_pwd = document.getElementById("check_pwd").value;
+        if (check_pwd == "") {
+            alert("비밀번호 확인은 필수 항목입니다.");
+            document.getElementById("check_pwd").focus();
+            return false;
+        }
+        if (check_pwd != user_pwd) {
+            alert("비밀번호가 일치하지 않습니다.");
+            document.getElementById("check_pwd").focus();
+            return false;
+        }
+
+        window.alert("Wind Up에 가입되었습니다.");
+    }
+
+    function checkDup() {
+        user_id = document.getElementById("user_id").value;
+        if (user_id == '') {
+            alert("아이디가 비어있습니다.");
+            document.getElementById("user_id").focus();
+            return false;
+        }
+    }
+window.setTimeout(function() {
+            $(".alert-auto-dismissible").fadeTo(500,0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+</script>

@@ -1,0 +1,30 @@
+<!--<link rel="stylesheet" href="{% '"-->
+
+{% if id %}
+    로그인 성공!
+    {{ id }} 님 환영합니다.
+    <a href="{% url 'users:logout' %}"> 로그아웃</a>
+    <a href="{% url 'users:update' %}"> 정보수정</a>
+{% else %}
+    <title>로그인</title>
+    <div id="page">
+        <form action = "" method="post">
+            {% csrf_token %}
+            <h3> 로그인 </h3>
+            <div id="id_field">
+                <label> 아이디 :
+                <input id="id_input" type="text" name="user_id" placeholder="아이디를 입력하세요" autofocus required>
+                </label>
+            </div>
+            <div id="pwd_field">
+                <label> 비밀번호 :
+                <input id="pwd_input" type="password" name="user_pwd" placeholder="비밀번호를 입력하세요" required>
+                </label>
+            </div>
+            <div id="buttons">
+                <a href = "{% url 'users:join' %}"> 회원가입 </a>
+                <input id="login" type="submit" value="로그인">
+            </div>
+        </form>
+    </div>
+{% endif %}

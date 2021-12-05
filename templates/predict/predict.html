@@ -26,10 +26,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title> 승패예측 페이지</title>
+    <title> 승부예측 페이지</title>
     <link rel="stylesheet" href="{% static 'css/predict.css' %}">
-<!--            <link href="predict.css" rel="stylesheet" type="text/css">-->
-    <!--        <script type="text/javascript" src="winLose.js"></script>-->
 </head>
 <body>
 <div id="winlose">
@@ -97,23 +95,25 @@
         <p id="static1"> 전력은 <label id="variable1">{{ stat_upper }}</label> 이(가) 더 우세합니다.</p>
         <p id="static2"> 기세는 <label id="variable2">{{ article_upper }}</label> 이(가) 더 우세합니다.</p>
         {% if both_upper == 'away' %}
-        <div style=" margin-left:25%">
+        <div style=" margin-left:33%">
         <div style="float:left; margin-right:2%;"> {{ game_info.away }} </div>
-        <div class="progressbar" style="float: left;"><progress class="progressbar" value="{{ winning_rate }}" max="100"></progress></div>
-        <div style="float:right; margin-right: 43%;">{{ game_info.home }} </div>
+        <div class="progressbar" style="float:left; margin-right:2%;"><progress class="progressbar" value="{{ winning_rate }}" max="100"></progress></div>
+        <div style="float:left;">{{ game_info.home }} </div>
         <br>
-        <div><p class="static3"> 오늘은 {{ winning_rate }}%의 확률로 <label class="variable3">{{ game_info.away }}</label>의 승리가 예상됩니다!</p></div>
+        <br>
         </div>
+        <p class="static3"> 오늘은 {{ winning_rate }}%의 확률로 <label class="variable3">{{ game_info.away }}</label>의 승리가 예상됩니다!</p>
         {% else %}
-        <div style=" margin-left:25%">
+        <div style=" margin-left:33%">
         <div style="float:left; margin-right:2%;"> {{ game_info.away }} </div>
-        <div class="progressbar" style="float: left;"><progress class="progressbar" value="{{ opposite_rate }}" max="100"></progress></div>
-        <div style="float:right; margin-right: 43%;">{{ game_info.home }} </div>
+        <div class="progressbar" style="float:left; margin-right:2%;"><progress class="progressbar" value="{{ opposite_rate }}" max="100"></progress></div>
+        <div style="float:left;">{{ game_info.home }} </div>
         </div>
         <br>
-        <div><p class="static3"> 오늘은 {{ winning_rate }}%의 확률로 <label class="variable3">{{ game_info.home }}</label>의 승리가 예상됩니다!</p></div>
+        <br>
+        </div>
+        <p class="static3"> 오늘은 {{ winning_rate }}%의 확률로 <label class="variable3">{{ game_info.home }}</label>의 승리가 예상됩니다!</p>
         {% endif %}
-    </div>
     {% else %}
         <br>
         <h1>{{ game_info.away_score }} : {{ game_info.home_score }}</h1>

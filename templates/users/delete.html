@@ -1,0 +1,16 @@
+<form action="" method="post">
+    {% csrf_token %}
+    <div id="updateInfo">
+        <h3>회원 탈퇴</h3>
+        <div id="enterInfo">
+            <div class="a">
+                <label>비밀번호 :
+                    <input id="pwd" type="password" name="user_pwd" placeholder="비밀번호를 입력하세요." autofocus required>
+                </label>
+            </div>
+        </div>
+        <input id="update" type="submit" value="탈퇴">
+    </div>
+</form>
+</body>
+</html>

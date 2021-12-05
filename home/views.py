@@ -24,10 +24,20 @@ def index(request):
             whole_keyword += arr2str(tenkey)
         load_highlight_wordcloud('전체', whole_keyword, date)
 
-    context = {
-        'matches': matches,
-        # 'img': img,
-        'date' : date,
-     }
+    if request.session.get('user'):
+        id = request.session['user']
+        context = {
+                'id': id,
+                'matches': matches,
+                # 'img': img,
+                'date': date,
+        }
+    else:
+        context = {
+                'matches': matches,
+                # 'img': img,
+                'date': date,
+        }
+
     return render(request, 'home/home.html', context)
 

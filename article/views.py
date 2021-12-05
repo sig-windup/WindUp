@@ -16,9 +16,6 @@ def date_range():
 
 # 기사 오류 해결
 def article_list(request):
-    """
-    template 출력
-    """
     page = request.GET.get('page','1') #GET 방식으로 정보를 받아오는 데이터
     team_text = request.GET.get('team')
     date = request.GET.get('date')
@@ -49,11 +46,21 @@ def article_list(request):
     paginator = Paginator(article, '10') #Paginator(분할될 객체, 페이지 당 담길 객체수)
     article_list = paginator.page(page) #페이지 번호를 받아 해당 페이지를 리턴 get_page 권장
 
-    context = {
-        'team_text': team_text,
-        'article_list': article_list,
-        'dates': dates,
-        'date': date,
-     }
+    if request.session.get('user'):
+        id = request.session['user']
+        context = {
+                'id': id,
+                'team_text': team_text,
+                'article_list': article_list,
+                'dates': dates,
+                'date': date,
+            }
+    else:
+        context = {
+            'team_text': team_text,
+            'article_list': article_list,
+            'dates': dates,
+            'date': date,
+        }
 
     return render(request, 'article/article_list.html', context)
